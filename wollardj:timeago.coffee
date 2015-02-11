@@ -14,12 +14,9 @@
     The global template helper `momentDuration` provides non-reactive results
     because its goal is slightly different. As the name implies, it only
     produces a `duration` that's calculated between two dates using `momentjs`'s
-    `diff` method. Usage:
+    `diff` and `duration` methods. Usage:
 
-    {{momentDuration start=date1 end=date2 unit='seconds'}}
-
-    ... `unit` is optional, and will default to seconds if omitted. More on
-    units can be found here: http://momentjs.com/docs/#/displaying/difference/
+    {{timeagoDuration start=date1 end=date2}}
 ###
 
 TIMEAGO_REFRESH = new ReactiveVar(new Date())
@@ -27,13 +24,18 @@ TIMEAGO_INTERVAL = null
 TIMEAGO_MS = 20000
 
 
-Template.registerHelper 'duration', (start, end, unit)->
-    if not _.isString(unit)
-        unit = 'seconds'
-    moment(end).diff(start, unit)
+Template.registerHelper 'timeagoDuration', (start, end)->
+    diff = moment(end).diff(start)
+    moment.duration(diff).humanize()
+
+
+Template.registerHelper 'timeagoDurationRaw', (start, end)->
+    moment(end).diff(start)
 
 
 Template.timeago.created = ->
+
+    this.uuid = Meteor.uuid()
 
     # only setup the interval if it hasn't been done already - we don't want
     # or expect one timer for every template instance.
@@ -50,12 +52,15 @@ Template.timeago.rendered = ->
     # tooltip. Here, we dressup that tooltip a bit using Bootstrap's `tooltip`,
     # as long as bootstrap's tooltip() method is available.
     try
-        $('[data-toggle="tooltip"]').tooltip()
+        $('#' + this.uuid).tooltip()
     catch e
         # do nothing and fallback to the traditional tool-tip functionality
 
 
 Template.timeago.helpers {
+    uuid: ->
+        Template.instance()?.uuid
+
     formatted: ->
         # get the TIMEAGO_REFRESH value so that when that variable gets updated
         # on on its interval, we'll update the fromNow() output as well.

@@ -24,10 +24,15 @@ If you've got a date object, you've got enough data to use the `timeago` templat
     </template>
 
 
-## Using the `duration` Template Helper
+## Using the `timeagoDuration` Template Helper
 
 This package also includes a global template helper called
-`duration`. The only thing this does is pass two dates through
-momentjs's `diff` method. In order to do this you need a starting date, ending date, and a unit of time to output. For example:
+`timeagoDuration`. The only thing this does is pass two dates through
+momentjs's `diff` method and then through `duration`. In order to do this you
+need a starting date and ending date. For example:
 
-    {{duration startDate endDate 'seconds'}}
+    {{timeagoDuration startDate endDate}}
+
+This might yield something like `a few seconds`. If you want the raw milliseconds, call `timeagoDurationRaw` instead:
+
+    {{timeagoDurationRaw startDate endDate}}
