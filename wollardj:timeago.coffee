@@ -35,7 +35,7 @@ Template.registerHelper 'timeagoDurationRaw', (start, end)->
 
 Template.timeago.created = ->
 
-    this.uuid = Meteor.uuid()
+    this.uuid = Random.id()
 
     # only setup the interval if it hasn't been done already - we don't want
     # or expect one timer for every template instance.
