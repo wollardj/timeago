@@ -9,9 +9,9 @@ Package.onUse(function(api) {
     api.versionsFrom('1.0.2.1');
     api.use([
         'coffeescript',
-        'meteor-platform',
+        'templating',
         'reactive-var',
-        'momentjs:moment@2.9.0'
+        'momentjs:moment@2.11.0'
     ]);
     api.addFiles([
             'wollardj:timeago.html',
